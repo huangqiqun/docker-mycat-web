@@ -16,6 +16,7 @@ services:
   mycat-web:
     restart: always
     image: tomcat
+    restart: always
     container_name: mycat-web
     ports:
       - 8082:8080
