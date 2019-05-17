@@ -1,0 +1,34 @@
+version: '2'
+services:
+  zookeeper:
+    image: zookeeper
+    restart: always
+    container_name: zookeeper
+    ports:
+        - "2181:2181"
+    networks:
+      compose_database-net:
+        ipv4_address: 172.18.0.11
+    environment:
+        ZOO_MY_ID: 1
+        ZOO_SERVERS: server.1=zookeeper:2888:3888
+
+  mycat-web:
+    restart: always
+    image: tomcat
+    container_name: mycat-web
+    ports:
+      - 8082:8080
+    links:
+      - zookeeper
+    volumes:
+      - ./mycat-web/:/usr/local/tomcat/webapps/
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      compose_database-net:
+        ipv4_address: 172.18.0.10
+
+networks:
+  compose_database-net:
+    external: true
